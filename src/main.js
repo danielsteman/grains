@@ -36,15 +36,17 @@ const material = new THREE.ShaderMaterial({
       vec2 uv = gl_FragCoord.xy / u_resolution.xy;
       float t = u_time * 0.3; // faster time for gradient motion
 
-      // Higher contrast colors
-      vec3 colorA = vec3(0.9, 0.7, 0.85); // brighter pinkish purple
-      vec3 colorB = vec3(1.0, 0.95, 0.8); // warm creamy yellow
-
-      // More complex animated gradient with two sine waves
-      float wave1 = sin(uv.x * 5.0 + t) * 0.3;
-      float wave2 = sin(uv.y * 7.0 - t * 1.5) * 0.2;
-      float gradientMix = clamp(uv.y + wave1 + wave2, 0.0, 1.0);
-
+      // More intense wave distortion
+      float wave1 = sin(uv.x * 6.0 + t * 1.2) * 0.4;
+      float wave2 = cos(uv.y * 8.0 - t * 1.5) * 0.3;
+      float wave3 = sin((uv.x + uv.y) * 4.0 + t * 0.8) * 0.2;
+  
+      float gradientMix = clamp(uv.y + wave1 + wave2 + wave3, 0.0, 1.0);
+  
+      // Brighter and more contrasty color endpoints
+      vec3 colorA = vec3(0.95, 0.7, 0.95); // bright violet pink
+      vec3 colorB = vec3(1.0, 0.95, 0.75); // warm pastel yellow
+  
       vec3 base = mix(colorA, colorB, gradientMix);
 
       // Moving soft blob shapes
